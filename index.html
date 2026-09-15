@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>林间小站 - 记录生活与思考</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f0;
+            color: #3a3a3a;
+            line-height: 1.8;
+        }
+
+        /* 顶部导航 */
+        header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #a8e6cf;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 28px;
+        }
+
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #a8e6cf;
+        }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #a8e6cf;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* 横幅区域 */
+        .banner {
+            background: linear-gradient(160deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+            color: #fff;
+            text-align: center;
+            padding: 80px 24px 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(168,230,207,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(52,152,219,0.06) 0%, transparent 40%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(20px, -20px) rotate(1deg); }
+            66% { transform: translate(-15px, 10px) rotate(-1deg); }
+        }
+
+        .banner h1 {
+            font-size: 2.6rem;
+            font-weight: 300;
+            margin-bottom: 16px;
+            position: relative;
+            letter-spacing: 4px;
+        }
+
+        .banner p {
+            font-size: 1.1rem;
+            color: #b0c4de;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* 主体内容 */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 24px;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 40px;
+        }
+
+        /* 文章列表 */
+        .posts-section h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 28px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #a8e6cf;
+            color: #2c3e50;
+        }
+
+        .post-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 28px 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .post-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .post-tag {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .post-tag.blue {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .post-tag.purple {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .post-tag.orange {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .post-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .post-card h3 a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s;
+        }
+
+        .post-card h3 a:hover {
+            color: #3498db;
+        }
+
+        .post-excerpt {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.9;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 14px;
+            color: #3498db;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .read-more:hover {
+            color: #2980b9;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .widget {
+            background: #fff;
+            border-radius: 10px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .widget h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #2c3e50;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* 关于我 */
+        .about-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a8e6cf, #3498db);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .about-text {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* 分类 */
+        .category-list {
+            list-style: none;
+        }
+
+        .category-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 0.9rem;
+        }
+
+        .category-list li:last-child {
+            border-bottom: none;
+        }
+
+        .category-list a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .category-list a:hover {
+            color: #3498db;
+        }
+
+        .category-count {
+            background: #f0f0f0;
+            color: #888;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        /* 归档 */
+        .archive-list {
+            list-style: none;
+        }
+
+        .archive-list li {
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+
+        .archive-list a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .archive-list a:hover {
+            color: #3498db;
+        }
+
+        /* 标签云 */
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tag-cloud a {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 16px;
+            font-size: 0.82rem;
+            color: #555;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .tag-cloud a:hover {
+            background: #3498db;
+            color: #fff;
+            border-color: #3498db;
+        }
+
+        /* 页脚 */
+        footer {
+            background: #2c3e50;
+            color: #aaa;
+            text-align: center;
+            padding: 36px 24px;
+            margin-top: 20px;
+        }
+
+        footer p {
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+
+        footer a {
+            color: #a8e6cf;
+            text-decoration: none;
+        }
+
+        /* 响应式 */
+        @media (max-width: 860px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .header-inner {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            nav ul {
+                gap: 18px;
+            }
+
+            .banner h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-inner">
+            <div class="logo">林间<span>小站</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#home">首页</a></li>
+                    <li><a href="#archive">归档</a></li>
+                    <li><a href="#categories">分类</a></li>
+                    <li><a href="#about">关于</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="banner">
+        <h1>在文字中漫步，在思考中成长</h1>
+        <p>这里是一个记录日常感悟、技术笔记与阅读心得的个人空间。每一篇文章都是时光的切片，留存那些值得回味的瞬间。</p>
+    </section>
+
+    <div class="container">
+        <!-- 文章区域 -->
+        <main class="posts-section">
+            <h2>最新文章</h2>
+
+            <article class="post-card">
+                <div class="post-meta">
+                    <span>2026-08-25</span>
+                    <span class="post-tag">随笔</span>
+                </div>
+                <h3><a href="#">关于「慢生活」的一些思考</a></h3>
+                <p class="post-excerpt">
+                    城市的节奏总是让人不自觉地加快脚步，但偶尔停下来看看路边的树、天上的云，会发现世界其实一直都很从容。最近在尝试减少不必要的信息输入，给自己留出更多安静思考的时间……
+                </p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </article>
+
+            <article class="post-card">
+                <div class="post-meta">
+                    <span>2026-08-18</span>
+                    <span class="post-tag blue">技术</span>
+                </div>
+                <h3><a href="#">用 CSS Grid 构建响应式布局的实践笔记</a></h3>
+                <p class="post-excerpt">
+                    Grid 布局是现代 CSS 中最强大的布局工具之一。这篇文章记录了我在重构个人项目时，如何利用 grid-template-areas 和 minmax() 实现灵活且优雅的页面结构……
+                </p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </article>
+
+            <article class="post-card">
+                <div class="post-meta">
+                    <span>2026-08-10</span>
+                    <span class="post-tag purple">读书</span>
+                </div>
+                <h3><a href="#">《百年孤独》重读：时间是一个圆</a></h3>
+                <p class="post-excerpt">
+                    第三次翻开这本书，每次读到的东西都不太一样。年轻时看到的是奇幻和浪漫，现在更多感受到的是命运的循环与人在时间面前的渺小。马尔克斯笔下的马孔多，像极了我们每个人的记忆……
+                </p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </article>
+
+            <article class="post-card">
+                <div class="post-meta">
+                    <span>2026-07-29</span>
+                    <span class="post-tag orange">生活</span>
+                </div>
+                <h3><a href="#">夏日厨房：几道简单又好吃的家常菜</a></h3>
+                <p class="post-excerpt">
+                    天气热的时候不太想在厨房待太久，但有些菜做起来快、吃起来满足。分享最近常做的三道菜：蒜蓉西兰花、番茄鸡蛋面、凉拌黄瓜。每道都不超过十五分钟……
+                </p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </article>
+
+            <article class="post-card">
+                <div class="post-meta">
+                    <span>2026-07-15</span>
+                    <span class="post-tag blue">技术</span>
+                </div>
+                <h3><a href="#">JavaScript 异步编程：从回调到 async/await</a></h3>
+                <p class="post-excerpt">
+                    回顾 JavaScript 异步编程的演进历程，从最初的回调地狱，到 Promise 的链式调用，再到 async/await 带来的同步写法。每种方式都有它的适用场景，理解底层原理才能做出更好的选择……
+                </p>
+                <a href="#" class="read-more">阅读全文 →</a>
+            </article>
+        </main>
+
+        <!-- 侧边栏 -->
+        <aside class="sidebar">
+            <div class="widget">
+                <h3>关于我</h3>
+                <div class="about-avatar">🌿</div>
+                <p class="about-text">
+                    一个喜欢阅读、写代码、做饭和散步的普通人。用这个小站记录生活中的点滴感悟和技术学习的心得。相信慢慢来，比较快。
+                </p>
+            </div>
+
+            <div class="widget">
+                <h3>文章分类</h3>
+                <ul class="category-list">
+                    <li>
+                        <a href="#">技术笔记</a>
+                        <span class="category-count">23</span>
+                    </li>
+                    <li>
+                        <a href="#">生活随笔</a>
+                        <span class="category-count">18</span>
+                    </li>
+                    <li>
+                        <a href="#">读书笔记</a>
+                        <span class="category-count">12</span>
+                    </li>
+                    <li>
+                        <a href="#">摄影日志</a>
+                        <span class="category-count">7</span>
+                    </li>
+                    <li>
+                        <a href="#">音乐分享</a>
+                        <span class="category-count">5</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="widget">
+                <h3>文章归档</h3>
+                <ul class="archive-list">
+                    <li><a href="#">2026 年 8 月</a></li>
+                    <li><a href="#">2026 年 7 月</a></li>
+                    <li><a href="#">2026 年 6 月</a></li>
+                    <li><a href="#">2026 年 5 月</a></li>
+                    <li><a href="#">2026 年 4 月</a></li>
+                    <li><a href="#">2026 年 3 月</a></li>
+                </ul>
+            </div>
+
+            <div class="widget">
+                <h3>标签云</h3>
+                <div class="tag-cloud">
+                    <a href="#">CSS</a>
+                    <a href="#">JavaScript</a>
+                    <a href="#">阅读</a>
+                    <a href="#">随笔</a>
+                    <a href="#">Node.js</a>
+                    <a href="#">生活</a>
+                    <a href="#">Python</a>
+                    <a href="#">摄影</a>
+                    <a href="#">设计</a>
+                    <a href="#">思考</a>
+                    <a href="#">音乐</a>
+                    <a href="#">旅行</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <p>© 2026 林间小站 · 用心记录每一天</p>
+        <p>Powered by <a href="#">静思笔记</a> · 托管于 <a href="#">云端</a></p>
+    </footer>
+
+</body>
+</html>
